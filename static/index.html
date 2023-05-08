@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whisper Web App Demo</title>
+    <script src="jquery.js"></script>
+
+</head>
+
+<body>
+    <h1>Whisper Web App Demo</h1>
+    <form enctype="multipart/form-data" id="file_upload_form">
+        <input name="file" type="file" id="file">
+        <label for="model_size">Model Size:</label>
+
+        <select name="model_size" id="model_size">
+            <option value="tiny">tiny</option>
+            <option value="base">base</option>
+            <option value="small">small</option>
+            <option value="medium">medium</option>
+            <option value="large">large</option>
+            <option value="large-v2">large-v2</option>
+        </select>
+        <input type="button" value="upload" id="upload_button" />
+    </form>
+    <h2>Transcript</h2>
+    <div id="result"></div>
+
+    <script>
+        $("#upload_button").on("click", function () {
+            $.ajax({
+                url: "upload",
+                type: "POST",
+                data: new FormData($("#file_upload_form")[0]),
+                success: function (data) {
+                    $("#result").text(data.text);
+                },
+                // Tell jQuery not to process data or worry about content-type
+                // You *must* include these options!
+                cache: false,
+                contentType: false,
+                processData: false,
+            });
+        });
+    </script>
+</body>
+
+</html>

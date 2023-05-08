@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  rabbitmq:
+    image: rabbitmq
+  app:
+    build: .
+    image: whisper-demo
+    ports:
+      - "8000:8000"
+  celery-worker:
+    image: whisper-demo
+    command: celery -A transcribe worker --loglevel=INFO
