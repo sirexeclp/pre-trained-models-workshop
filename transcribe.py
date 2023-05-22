@@ -1,5 +1,6 @@
 import base64
-from celery import Celery
+import os
+from celery import Celery, chain
 from fastapi import UploadFile
 import whisper
 from whisper.audio import SAMPLE_RATE
@@ -10,6 +11,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 import numpy as np
 import ffmpeg
+from transformers import pipeline
 
 
 app = Celery("tasks", backend="rpc://rabbitmq", broker="pyamqp://rabbitmq")
@@ -35,7 +37,22 @@ def load_audio(file: str, sr: int = SAMPLE_RATE):
 
 @app.task
 def transcribe(audio_file: UploadFile, model_size: str):
-    model = whisper.load_model(model_size)
+    model = whisper.load_model(
+        model_size, download_root=os.environ.get("TRANSFORMERS_CACHE")
+    )
     audio = load_audio(audio_file)
     result = model.transcribe(audio)
-    return {"text": result["text"]}
+    return result["text"]
+    # text = result["text"]
+    # print(text)
+
+
+@app.task
+def summarize(text: str, max_length=130, min_length=30):
+    summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+    return summarizer(text)[0]["summary_text"]
+
+
+@app.task
+def transcribe_and_summarize(audio_file, model_size: str):
+    return (transcribe.s(audio_file, model_size) | summarize.s())()

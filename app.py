@@ -14,7 +14,7 @@ app = FastAPI()
 async def create_upload_file(file: UploadFile, model_size: str = Form()):
     with file.file as the_actual_file:
         result = transcribe.delay(base64.b64encode(the_actual_file.read()).decode("UTF-8"), model_size)
-    return result.wait()
+    return  {"text": result.wait()}
 
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
