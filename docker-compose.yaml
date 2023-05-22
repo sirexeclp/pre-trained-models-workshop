@@ -10,3 +10,14 @@ services:
   celery-worker:
     image: whisper-demo
     command: celery -A transcribe worker --loglevel=INFO
+    environment:
+      - TRANSFORMERS_CACHE=/models
+    volumes:
+      - ./models:/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
