@@ -49,7 +49,7 @@ def transcribe(audio_file: UploadFile, model_size: str):
 
 @app.task
 def summarize(text: str, max_length=130, min_length=30):
-    summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+    summarizer = pipeline("summarization", model="pszemraj/long-t5-tglobal-base-16384-book-summary")
     return summarizer(text)[0]["summary_text"]
 
 
