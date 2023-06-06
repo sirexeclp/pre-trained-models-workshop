@@ -7,35 +7,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whisper Web App Demo</title>
     <script src="jquery.js"></script>
-
+    <link href="css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 
 <body>
-    <h1>Whisper Web App Demo</h1>
-    <form enctype="multipart/form-data" id="file_upload_form">
-        <input name="file" type="file" id="file">
-        <label for="model_size">Model Size:</label>
+    <div > 
 
-        <select name="model_size" id="model_size">
-            <option value="tiny">tiny</option>
-            <option value="base">base</option>
-            <option value="small">small</option>
-            <option value="medium">medium</option>
-            <option value="large">large</option>
-            <option value="large-v2">large-v2</option>
-        </select>
-        <input type="button" value="upload" id="upload_button" />
-    </form>
-    <h2>Transcript</h2>
-    <div id="result"></div>
-
+    <!-- </div>class="vh-100 d-flex justify-content-center align-items-center"> -->
+        <div class="container text-center">
+            <div class="row mb-4 mt-4">
+                <h1>Whisper Web App Demo</h1>
+            </div>
+            <div class="row mb-5">
+                <form enctype="multipart/form-data" id="file_upload_form">
+                    <div class="row justify-content-center">
+                        <div class="col-md-auto d-flex flex-column justify-content-end">
+                            <label for="formFileLg" class="form-label">1. Select your audio file</label>
+                            <input class="form-control form-control-lg" id="file" name="file" type="file">
+                        </div>
+                        <div class="col-sm-auto d-flex flex-column justify-content-end">
+                            <label for="model_size" class="form-label">2. Select the model size</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon1">Model</span>
+                                <!-- <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"> -->
+                                <select class="form-select form-select-lg" name="model_size" id="model_size">
+                                    <option value="tiny">tiny</option>
+                                    <option value="base">base</option>
+                                    <option value="small">small</option>
+                                    <option value="medium">medium</option>
+                                    <option value="large">large</option>
+                                    <option value="large-v2">large-v2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto d-flex flex-column justify-content-end">
+                            <label for="upload_button" class="form-label">3. Upload and wait</label>
+                            <button type="button" value="Summarize!" id="upload_button" class="btn btn-primary btn-lg">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                                    id="spinner"></span>
+                                Summarize!
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-7">
+                    <h2>Transcript</h2>
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Lorem ipsum ..." id="result"
+                            style="height: 100px" readonly="true">Lorem ipsum ...</textarea>
+                        <!-- <label for="floatingTextarea2">Lorem ipsum ...</label> -->
+                    </div>
+                    <!-- <div id="result"></div> -->
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
+        $("#spinner").hide();
         $("#upload_button").on("click", function () {
+            $("#spinner").show();
             $.ajax({
                 url: "upload",
                 type: "POST",
                 data: new FormData($("#file_upload_form")[0]),
                 success: function (data) {
+                    $("#spinner").hide();
                     $("#result").text(data.text);
                 },
                 // Tell jQuery not to process data or worry about content-type
@@ -46,6 +85,9 @@
             });
         });
     </script>
+    <script src="js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
