@@ -8,3 +8,5 @@ transformers
 torchmetrics
 pandas
 matplotlib
+jupyter
+git+https://github.com/sirexeclp/nvidia-ml-py3.git
