@@ -4,7 +4,7 @@ import base64
 from fastapi import FastAPI, Form, UploadFile
 from fastapi.staticfiles import StaticFiles
 
-from transcribe import transcribe_and_summarize
+from .condense import transcribe_and_summarize
 
 app = FastAPI()
 
@@ -28,4 +28,4 @@ async def create_upload_file(
 
 
 # serve static html, css and js files
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+app.mount("/", StaticFiles(directory="condensor/static", html=True), name="static")

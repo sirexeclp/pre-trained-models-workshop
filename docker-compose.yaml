@@ -11,16 +11,16 @@ services:
       - MQ_HOST=rabbitmq
   celery-worker:
     image: whisper-demo
-    command: celery -A transcribe worker --loglevel=INFO
+    command: celery -A condensor.condense worker --loglevel=INFO
     environment:
       - TRANSFORMERS_CACHE=/models
       - MQ_HOST=rabbitmq
     volumes:
       - ./models:/models
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
