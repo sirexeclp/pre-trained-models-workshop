@@ -7,8 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whisper Web App Demo</title>
     <script src="jquery.js"></script>
-    <link href="css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -44,9 +43,9 @@
                         <div class="col-sm-2 d-flex flex-column justify-content-end">
                             <label for="min_max" class="form-label">3. Summary length</label>
                             <div id="min_max" class="input-group">
-                                <input type="text" class="form-control form-control-lg" value="30" aria-label="Min"/>
+                                <input type="text" class="form-control form-control-lg" value="30" aria-label="Min" id="min_length" name="min_length"/>
                                 <span class="input-group-text">-</span>
-                                <input type="text" class="form-control form-control-lg" value="150" aria-label="Max">
+                                <input type="text" class="form-control form-control-lg" value="150" aria-label="Max" id="max_length" name="max_length"/>
                               </div>
                         </div>
                         <div class="col-sm-auto d-flex flex-column justify-content-end">
@@ -73,9 +72,27 @@
             </div>
         </div>
     </div>
-    <script src="js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-        crossorigin="anonymous"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+        $("#spinner").hide();
+        $("#upload_button").on("click", function () {
+            $("#spinner").show();
+            $.ajax({
+                url: "upload",
+                type: "POST",
+                data: new FormData($("#file_upload_form")[0]),
+                success: function (data) {
+                    $("#spinner").hide();
+                    $("#result").text(data.text);
+                },
+                // Tell jQuery not to process data or worry about content-type
+                // You *must* include these options!
+                cache: false,
+                contentType: false,
+                processData: false,
+            });
+        });
+    </script>
 </body>
 
 </html>
