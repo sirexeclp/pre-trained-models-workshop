@@ -4,7 +4,19 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "condensor"
-authors = [{name = "Felix Grzelka", email = "felix.grzelka@hpi.de"}]
-license = {file = "LICENSE"}
+authors = [{ name = "Felix Grzelka", email = "felix.grzelka@hpi.de" }]
+license = { file = "LICENSE" }
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
+dependencies = [
+    "openai-whisper",
+    "fastapi",
+    "python-multipart",
+    "uvicorn",
+    "ffmpeg-python",
+    "celery",
+    "transformers",
+    "torchmetrics",
+    "pandas",
+    "matplotlib",
+]
