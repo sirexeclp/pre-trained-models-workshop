@@ -7,11 +7,14 @@ services:
     image: whisper-demo
     ports:
       - "8000:8000"
+    environment:
+      - MQ_HOST=rabbitmq
   celery-worker:
     image: whisper-demo
     command: celery -A transcribe worker --loglevel=INFO
     environment:
       - TRANSFORMERS_CACHE=/models
+      - MQ_HOST=rabbitmq
     volumes:
       - ./models:/models
     deploy:

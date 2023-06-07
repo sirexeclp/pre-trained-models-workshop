@@ -44,7 +44,7 @@ def transcribe(base64_audio: str, model_size: str):
 
 
 @app.task
-def summarize(text: str, max_length=100, min_length=30):
+def summarize(text: str, min_length=30, max_length=100):
     """Return a summary of the input text."""
     summarizer = pipeline(
         "summarization", model="pszemraj/long-t5-tglobal-base-16384-book-summary"
@@ -53,5 +53,5 @@ def summarize(text: str, max_length=100, min_length=30):
         "summary_text"
     ]
 
-
-transcribe_and_summarize = transcribe.s() | summarize.s()
+def transcribe_and_summarize(base64_audio: str, model_size: str, min_length: int, max_length:int):
+    return transcribe.s(base64_audio, model_size) | summarize.s(min_length=min_length, max_length=max_length)

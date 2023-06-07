@@ -12,9 +12,9 @@
 </head>
 
 <body>
-    <div > 
+    <div>
 
-    <!-- </div>class="vh-100 d-flex justify-content-center align-items-center"> -->
+        <!-- </div>class="vh-100 d-flex justify-content-center align-items-center"> -->
         <div class="container text-center">
             <div class="row mb-4 mt-4">
                 <h1>Whisper Web App Demo</h1>
@@ -41,8 +41,16 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-2 d-flex flex-column justify-content-end">
+                            <label for="min_max" class="form-label">3. Summary length</label>
+                            <div id="min_max" class="input-group">
+                                <input type="text" class="form-control form-control-lg" value="30" aria-label="Min"/>
+                                <span class="input-group-text">-</span>
+                                <input type="text" class="form-control form-control-lg" value="150" aria-label="Max">
+                              </div>
+                        </div>
                         <div class="col-sm-auto d-flex flex-column justify-content-end">
-                            <label for="upload_button" class="form-label">3. Upload and wait</label>
+                            <label for="upload_button" class="form-label">4. Upload and wait</label>
                             <button type="button" value="Summarize!" id="upload_button" class="btn btn-primary btn-lg">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                                     id="spinner"></span>
@@ -54,10 +62,10 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-7">
-                    <h2>Transcript</h2>
+                    <h2>Summary</h2>
                     <div class="form-floating">
-                        <textarea class="form-control" placeholder="Lorem ipsum ..." id="result"
-                            style="height: 100px" readonly="true">Lorem ipsum ...</textarea>
+                        <textarea class="form-control" placeholder="Lorem ipsum ..." id="result" style="height: 100px"
+                            readonly="true">Lorem ipsum ...</textarea>
                         <!-- <label for="floatingTextarea2">Lorem ipsum ...</label> -->
                     </div>
                     <!-- <div id="result"></div> -->
@@ -65,26 +73,6 @@
             </div>
         </div>
     </div>
-    <script>
-        $("#spinner").hide();
-        $("#upload_button").on("click", function () {
-            $("#spinner").show();
-            $.ajax({
-                url: "upload",
-                type: "POST",
-                data: new FormData($("#file_upload_form")[0]),
-                success: function (data) {
-                    $("#spinner").hide();
-                    $("#result").text(data.text);
-                },
-                // Tell jQuery not to process data or worry about content-type
-                // You *must* include these options!
-                cache: false,
-                contentType: false,
-                processData: false,
-            });
-        });
-    </script>
     <script src="js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>

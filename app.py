@@ -10,12 +10,20 @@ app = FastAPI()
 
 
 @app.post("/upload")
-async def create_upload_file(file: UploadFile, model_size: str = Form()):
+async def create_upload_file(
+    file: UploadFile,
+    model_size: str = Form(),
+    min_length: int = Form(),
+    max_length: int = Form(),
+):
     """File upload handler."""
     with file.file as the_actual_file:
-        result = transcribe_and_summarize.delay(
-            base64.b64encode(the_actual_file.read()).decode("UTF-8"), model_size
-        )
+        result = transcribe_and_summarize(
+            base64.b64encode(the_actual_file.read()).decode("UTF-8"),
+            model_size,
+            min_length,
+            max_length,
+        ).delay()
     return {"text": result.wait()}
 
 
