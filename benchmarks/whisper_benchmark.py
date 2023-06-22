@@ -17,11 +17,13 @@ class ModelSize(Enum):
     SMALL = "small"
     MEDIUM = "medium"
     LARGE = "large"
-    LARGE_V2 = "large-v2"
 
 
 class Stopwatch:
-    """A context manager based stopwatch."""
+    """A context manager based stopwatch.
+
+    For more information see: https://docs.python.org/3/reference/compound_stmts.html#with
+    """
 
     def __init__(self) -> None:
         self.start = None
@@ -30,13 +32,15 @@ class Stopwatch:
     @property
     def duration(self) -> float:
         """Return the elapsed duration in seconds."""
-        return self.end - self.start
+        return # TODO: compute the elapsed time
 
     def __enter__(self):
-        self.start = time.time()
+        """This method is called, when the stopwatch is started."""
+        self.start = # TODO: save the current time
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
+        """This method is called, when the stopwatch is stopped."""
         self.end = time.time()
 
 
@@ -71,12 +75,16 @@ def wer_benchmark(
 ) -> float:
     """Benchmark the given model size, by measuring time, energy, and WER."""
     model = whisper.load_model(model_size.value)
-    with GPUEnergyMeter() as energy_meter:
-        with Stopwatch() as stopwatch:
+    
+    # TODO: use the Stopwatch class to measure the inference delay
+    with TODO as stopwatch:
+        # TODO: use the GPUEnergyMeter to measure the energy used by the GPU during inference
             prediction = model.transcribe(str(input_file))
+    
     target = reference_file.read_text()
+    wer = # TODO: compute the word error rate
     return (
-        word_error_rate(preds=prediction["text"], target=target).item(),
+        wer,
         stopwatch.duration,
         energy_meter.energy,
     )
@@ -99,7 +107,9 @@ def benchmark_wer_model_sizes(
         }
         print(result)
         results.append(result)
-    pd.DataFrame(results).to_csv(output_file, index=False)
+    
+    df = # TODO: convert the results into a pandas DataFrame
+    df.to_csv(output_file, index=False)
 
 def get_gpu_name() -> str:
     """Return the name of the first GPU."""
