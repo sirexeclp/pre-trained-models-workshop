@@ -5,8 +5,7 @@ services:
   app:
     build: .
     image: whisper-demo
-    ports:
-      - "8000:8000"
+    # TODO: expose Port 8000 of the app container
     environment:
       - MQ_HOST=rabbitmq
   celery-worker:
@@ -17,10 +16,5 @@ services:
       - MQ_HOST=rabbitmq
     volumes:
       - ./models:/models
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+
+  # TODO: enable docker gpu support for the celery-worker container
