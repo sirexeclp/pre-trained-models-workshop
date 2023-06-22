@@ -40,14 +40,17 @@ def transcribe(base64_audio: str, model_size: str):
         model_size, download_root=os.environ.get("TRANSFORMERS_CACHE")
     )
     audio = audio_from_base64(base64_audio)
-    return model.transcribe(audio)["text"]
+    
+    transript = # TODO: use the model to transcribe the audio
+    return transript
 
 
 @app.task
 def summarize(text: str, min_length=30, max_length=100):
     """Return a summary of the input text."""
     summarizer = pipeline(
-        "summarization", model="pszemraj/long-t5-tglobal-base-16384-book-summary"
+        "summarization",
+        model= # TODO: choose a model to be used in the summarization pipeline (put the huggingface string here)
     )
     return summarizer(text, min_length=min_length, max_length=max_length)[0][
         "summary_text"

@@ -4,10 +4,14 @@ import base64
 from fastapi import FastAPI, Form, UploadFile
 from fastapi.staticfiles import StaticFiles
 
+from pydantic import BaseModel
+
 from .condense import transcribe_and_summarize
 
 app = FastAPI()
 
+class Summary(BaseModel):
+    summary: str
 
 @app.post("/upload")
 async def create_upload_file(
@@ -24,7 +28,8 @@ async def create_upload_file(
             min_length,
             max_length,
         ).delay()
-    return {"text": result.wait()}
+    summary = result.wait()
+    return # TODO: return a Summary object to the client
 
 
 # serve static html, css and js files
