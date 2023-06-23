@@ -1,35 +1,42 @@
 """This is our fastapi backend."""
-import base64
+import os
 
+import transformers
+import whisper
 from fastapi import FastAPI, Form, UploadFile
 from fastapi.staticfiles import StaticFiles
-
+from .load_audio import load_audio
 from pydantic import BaseModel
-
-from .condense import transcribe_and_summarize
 
 app = FastAPI()
 
-class Summary(BaseModel):
-    summary: str
 
-@app.post("/upload")
-async def create_upload_file(
+class Result(BaseModel):
+    summary: str
+    transcript: str
+
+
+@app.post("/summarize")
+async def summarize(
     file: UploadFile,
     model_size: str = Form(),
     min_length: int = Form(),
     max_length: int = Form(),
 ):
-    """File upload handler."""
-    with file.file as the_actual_file:
-        result = transcribe_and_summarize(
-            base64.b64encode(the_actual_file.read()).decode("UTF-8"),
-            model_size,
-            min_length,
-            max_length,
-        ).delay()
-    summary = result.wait()
-    return # TODO: return a Summary object to the client
+    """Summarize the uploaded file."""
+    audio = load_audio(file)
+    model = whisper.load_model(
+        model_size,
+        download_root=os.environ.get("TRANSFORMERS_CACHE")
+    )
+    transcript = model.transcribe(audio)["text"]
+    summarizer = transformers.pipeline(
+        "summarization", model="pszemraj/long-t5-tglobal-base-16384-book-summary"
+    )
+    summary = summarizer(transcript, min_length=min_length, max_length=max_length)[0][
+        "summary_text"
+    ]
+    return Result(summary=summary, transcript=transcript)
 
 
 # serve static html, css and js files

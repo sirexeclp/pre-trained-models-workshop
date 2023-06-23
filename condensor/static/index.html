@@ -78,7 +78,7 @@
         $("#upload_button").on("click", function () {
             $("#spinner").show();
             $.ajax({
-                url: "upload",
+                url: "summarize",
                 type: "POST",
                 data: new FormData($("#file_upload_form")[0]),
                 success: function (data) {
