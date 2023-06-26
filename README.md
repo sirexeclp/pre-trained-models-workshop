@@ -42,16 +42,16 @@ You should now see some plots with your results.
 
 The KISZ CONDENSOR is a web based tool that can summarize audio files in text form.
 It uses OpenAI Whisper to transcribe the audio and the Huggingface `summary` pipeline with `long-t5` to create a summary.
-The frontend is implemented in HTML5 with bootstrap css and jquery.
-The backend uses fastapi.
+The front-end is implemented in HTML5 with bootstrap CSS and jquery.
+The back-end uses fastapi.
 Everything is orchestrated using docker-compose.
 
 All files for this part of the exercise can be found in [condensor](condensor).
 
-## Step1: Write the backend
+## Step1: Write the back-end
 
 Open [app.py](condensor/app.py).
-In this file you will find the `summarize` function, which handles the POST requests made from the frontend.
+In this file you will find the `summarize` function, which handles the POST requests made from the front-end.
 As in the previous exercise, your task is to fill in the missing TODOs.
 
 ### Step 2: Run some tests
@@ -71,7 +71,7 @@ Now you can run the app by invoking:
 uvicorn condensor.app:app
 ~~~
 
-This should start up a webserver on port 8000.
+This should start up a web-server on port 8000.
 (If you are working on one of the vms, VS-Code should automatically forward this port to your local machine.)
 
 ### Step4: Test the app
@@ -82,12 +82,12 @@ You can test the app, by using the example file provided in [benchmarks/examples
 
 ## Part 3: Docker
 
-We have preinstalled docker, docker-compose and the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker) on the laptos and vms.
+We have preinstalled docker, docker-compose and the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker) on the laptops and vms.
 So for now we will just focus on the configuration and usage of docker and docker-compose.
 
 ### Step1: Fix the docker-compose file
 
-We have provided a complete dockerfile for you, but the [docker-compose.yaml](docker-compose.yaml) 
+We have provided a complete docker-file for you, but the [docker-compose.yaml](docker-compose.yaml) 
 is missing a few important lines.
 
 ### Step2: Test the docker container
