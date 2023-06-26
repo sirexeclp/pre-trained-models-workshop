@@ -42,17 +42,19 @@ class MockWhisperModel:
 def mock_load_model(model_size: str):
     return MockWhisperModel(model_size)
 
+
 class MockPipeline:
     def __init__(self, name: str, model: str) -> None:
         self.name = name
         self.model = model
-    
+
     def __call__(self, inputs: str) -> list[dict[str, str]]:
         return [{"summary_text": "summary"}]
 
 
 def load_mock_pipeline(name, model):
     return MockPipeline(name=name, model=model)
+
 
 def mock_load_audio(path: str):
     return None
