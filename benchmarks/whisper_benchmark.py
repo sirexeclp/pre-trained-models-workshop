@@ -2,11 +2,11 @@
 import time
 from enum import Enum
 from pathlib import Path
+from typing import Tuple
 
-import pandas as pd
 import whisper
-from pynvml3.pynvml import NVMLLib
-from torchmetrics.functional import word_error_rate
+
+from . import utils
 
 
 class ModelSize(Enum):
@@ -15,117 +15,34 @@ class ModelSize(Enum):
     TINY = "tiny"
     BASE = "base"
     SMALL = "small"
-    MEDIUM = "medium"
-    LARGE = "large"
 
+    # We will skip the larger models, to save some time.
+    # If you still have time left, you can uncomment these
+    # and include them in your benchmark.
 
-class Stopwatch:
-    """A context manager based stopwatch.
-
-    For more information see: https://docs.python.org/3/reference/compound_stmts.html#with
-    """
-
-    def __init__(self) -> None:
-        self.start = None
-        self.end = None
-
-    @property
-    def duration(self) -> float:
-        """Return the elapsed duration in seconds."""
-        return # TODO: compute the elapsed time
-
-    def __enter__(self):
-        """This method is called, when the stopwatch is started."""
-        self.start = # TODO: save the current time
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        """This method is called, when the stopwatch is stopped."""
-        self.end = time.time()
-
-
-class GPUEnergyMeter:
-    """A context manager based GPU energy meter."""
-
-    def __init__(self, device_index=0) -> None:
-        self.start = None
-        self.end = None
-        self.lib = NVMLLib()
-        self.device_index = device_index
-        self.device = None
-
-    @property
-    def energy(self) -> float:
-        """Return the total amount of consumed energy in J."""
-        return (self.end - self.start) / 1_000
-
-    def __enter__(self):
-        self.lib.open()
-        self.device = self.lib.device[self.device_index]
-        self.start = self.device.get_total_energy_consumption()
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.end = self.device.get_total_energy_consumption()
-        self.lib.close()
+    # MEDIUM = "medium"
+    # LARGE = "large"
 
 
 def wer_benchmark(
     model_size: ModelSize, input_file: Path, reference_file: Path
-) -> float:
+) -> Tuple[float, float, float]:
     """Benchmark the given model size, by measuring time, energy, and WER."""
     model = whisper.load_model(model_size.value)
-    
-    # TODO: use the Stopwatch class to measure the inference delay
-    with TODO as stopwatch:
-        # TODO: use the GPUEnergyMeter to measure the energy used by the GPU during inference
-            prediction = model.transcribe(str(input_file))
-    
+    gpu_energy = utils.GPUEnergyMeter()
+
+    start = None  # TODO: save the timestamp of the start of this benchmark
+    with gpu_energy:
+        prediction = model.transcribe(str(input_file))
+    end = None  # TODO: save the timestamp of the bend of this benchmark
+    runtime = None  # TODO: compute the runtime
+
     target = reference_file.read_text()
-    wer = # TODO: compute the word error rate
+    wer = None  # TODO: insert function to compute word error rate
+    # Hint: maybe you can find a library function
+    # torch metrics: https://torchmetrics.readthedocs.io/en/stable/
     return (
         wer,
-        stopwatch.duration,
-        energy_meter.energy,
+        runtime,
+        gpu_energy.energy,
     )
-
-
-def benchmark_wer_model_sizes(
-    input_file: Path, reference_file: Path, output_file: Path
-):
-    """Run the wer vs model size benchmark on all available sizes."""
-    results = []
-    for model_size in ModelSize:
-        wer, inference_time, energy = wer_benchmark(
-            model_size, input_file, reference_file
-        )
-        result = {
-            "model_size": model_size.value,
-            "time": inference_time,
-            "wer": wer,
-            "energy": energy,
-        }
-        print(result)
-        results.append(result)
-    
-    df = # TODO: convert the results into a pandas DataFrame
-    df.to_csv(output_file, index=False)
-
-def get_gpu_name() -> str:
-    """Return the name of the first GPU."""
-    with NVMLLib() as lib:
-        return lib.device[0].get_name()
-
-
-def main():
-    """The main function."""
-    examples_path = Path("benchmarks", "examples")
-    results_path = Path("benchmarks", "results", "whisper_benchmark")
-    input_file = examples_path / "10-min-talk.mp3"
-    reference_file = examples_path / "10-min-talk-reference.txt"
-    results_file = results_path / f"{get_gpu_name()}.csv"
-    benchmark_wer_model_sizes(input_file, reference_file, results_file)
-
-
-if __name__ == "__main__":
-    main()
