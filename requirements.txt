@@ -10,5 +10,6 @@ pandas
 matplotlib
 jupyter
 pytest
+httpx
 pre-commit
 git+https://github.com/sirexeclp/nvidia-ml-py3.git
