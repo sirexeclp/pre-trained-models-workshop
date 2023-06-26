@@ -5,7 +5,7 @@ import transformers
 import whisper
 from fastapi import FastAPI, Form, UploadFile
 from fastapi.staticfiles import StaticFiles
-from .load_audio import load_audio
+from . import utils
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -19,25 +19,32 @@ class Result(BaseModel):
 @app.post("/summarize")
 async def summarize(
     file: UploadFile,
-    model_size: str = Form(),
+    whisper_model_size: str = Form(),
     min_length: int = Form(),
     max_length: int = Form(),
 ):
-    """Summarize the uploaded file."""
-    audio = load_audio(file)
-    model = whisper.load_model(
-        model_size,
-        download_root=os.environ.get("TRANSFORMERS_CACHE")
-    )
+    """Summarize the uploaded file.
+    
+    1. use the load_audio function to load the audio file
+    2. load the requested model_size of whisper
+    3. transcribe the audio using whisper
+    4. load a summarization pipeline
+    4. summarize the transcript
+    5. return the Result object back to the client
+    """
+    audio = utils.load_audio(file)
+    model = None # TODO: load whisper model
     transcript = model.transcribe(audio)["text"]
     summarizer = transformers.pipeline(
         "summarization", model="pszemraj/long-t5-tglobal-base-16384-book-summary"
     )
-    summary = summarizer(transcript, min_length=min_length, max_length=max_length)[0][
-        "summary_text"
-    ]
+    summary = None # TODO: use summarizer to summarize
     return Result(summary=summary, transcript=transcript)
 
 
 # serve static html, css and js files
 app.mount("/", StaticFiles(directory="condensor/static", html=True), name="static")
+
+if __name__ =="__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0")

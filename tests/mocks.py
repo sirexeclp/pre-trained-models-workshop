@@ -1,5 +1,6 @@
 import time
 from pathlib import Path
+from typing import Any
 
 
 class MockGPUEnergyMeter:
@@ -32,9 +33,26 @@ class MockWhisperModel:
         time.sleep(0.15)
         if self.model_size == "tiny":
             return ""
+        elif self.model_size == "medium":
+            return {"text": "transcript"}
         else:
             return Path("benchmarks/examples/10-min-talk-reference.txt").read_text()
 
 
 def mock_load_model(model_size: str):
     return MockWhisperModel(model_size)
+
+class MockPipeline:
+    def __init__(self, name: str, model: str) -> None:
+        self.name = name
+        self.model = model
+    
+    def __call__(self, inputs: str) -> list[dict[str, str]]:
+        return [{"summary_text": "summary"}]
+
+
+def load_mock_pipeline(name, model):
+    return MockPipeline(name=name, model=model)
+
+def mock_load_audio(path: str):
+    return None
