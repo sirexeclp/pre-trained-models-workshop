@@ -14,9 +14,6 @@ dependencies = [
     "python-multipart",
     "uvicorn",
     "ffmpeg-python",
-    "celery",
     "transformers",
     "torchmetrics",
-    "pandas",
-    "matplotlib",
 ]

@@ -1,20 +1,11 @@
 version: "3.9"
 services:
-  rabbitmq:
-    image: rabbitmq
   app:
     build: .
     image: whisper-demo
-    # TODO: expose Port 8000 of the app container
-    environment:
-      - MQ_HOST=rabbitmq
-  celery-worker:
-    image: whisper-demo
-    command: celery -A condensor.condense worker --loglevel=INFO
+    # TODO: expose Port 8000 of the app container to the host
     environment:
       - TRANSFORMERS_CACHE=/models
-      - MQ_HOST=rabbitmq
     volumes:
       - ./models:/models
-
   # TODO: enable docker gpu support for the celery-worker container
