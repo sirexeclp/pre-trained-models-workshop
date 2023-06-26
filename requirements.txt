@@ -9,4 +9,6 @@ torchmetrics
 pandas
 matplotlib
 jupyter
+pytest
+pre-commit
 git+https://github.com/sirexeclp/nvidia-ml-py3.git
