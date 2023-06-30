@@ -13,7 +13,7 @@ def benchmark_wer_model_sizes(
     results = []
     for model_size in ModelSize:
         wer, inference_time, energy = wer_benchmark(
-            model_size, input_file, reference_file
+            model_size, str(input_file), reference_file
         )
         result = {
             "model_size": model_size.value,

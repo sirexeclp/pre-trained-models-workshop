@@ -25,7 +25,7 @@ class ModelSize(Enum):
 
 
 def wer_benchmark(
-    model_size: ModelSize, input_file: Path, reference_file: Path
+    model_size: ModelSize, input_file: str, reference_file: Path
 ) -> Tuple[float, float, float]:
     """Benchmark the given model size, by measuring time, energy, and WER."""
     model = whisper.load_model(model_size.value)
