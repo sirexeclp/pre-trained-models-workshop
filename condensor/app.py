@@ -21,8 +21,8 @@ class Result(BaseModel):
 async def summarize(
     file: UploadFile,
     whisper_model_size: str = Form(),
-    min_length: int = Form(),
-    max_length: int = Form(),
+    min_summary_length: int = Form(),
+    max_summary_length: int = Form(),
 ):
     """Summarize the uploaded file.
 
@@ -30,7 +30,7 @@ async def summarize(
     2. load the requested model_size of whisper
     3. transcribe the audio using whisper
     4. load a summarization pipeline
-    4. summarize the transcript
+    4. summarize the transcript (make sure to set min and max length)
     5. return the Result object back to the client
     """
     audio = utils.load_audio(file)
