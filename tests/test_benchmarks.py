@@ -1,15 +1,50 @@
 from pathlib import Path
 
+import torchmetrics
 import whisper
-from mocks import MockGPUEnergyMeter, mock_load_model
+from mocks import (
+    MockGPUEnergyMeter,
+    MockModelLoader,
+    mock_wer_class,
+    mock_word_error_rate,
+)
 
+import benchmarks.whisper_benchmark
 from benchmarks import utils
 from benchmarks.whisper_benchmark import ModelSize, wer_benchmark
 
 
+def patch_wer(monkeypatch):
+    """Try to patch all possible word error rate functions and import locations."""
+    try:
+        monkeypatch.setattr(
+            torchmetrics.functional, "word_error_rate", mock_word_error_rate
+        )
+    except:
+        pass
+    try:
+        monkeypatch.setattr(
+            benchmarks.whisper_benchmark, "word_error_rate", mock_word_error_rate
+        )
+    except:
+        pass
+    try:
+        monkeypatch.setattr(torchmetrics, "WordErrorRate", mock_wer_class)
+    except:
+        pass
+    try:
+        monkeypatch.setattr(
+            benchmarks.whisper_benchmark, "WordErrorRate", mock_wer_class
+        )
+    except:
+        pass
+
+
 def test_wer_tiny(monkeypatch):
-    monkeypatch.setattr(whisper, "load_model", mock_load_model)
+    monkeypatch.setattr(whisper, "load_model", MockModelLoader(return_strategy="empty"))
     monkeypatch.setattr(utils, "GPUEnergyMeter", MockGPUEnergyMeter)
+    patch_wer(monkeypatch)
+
     wer, runtime, energy = wer_benchmark(
         ModelSize.TINY,
         Path("benchmarks/examples/10-min-talk.mp3"),
@@ -21,8 +56,11 @@ def test_wer_tiny(monkeypatch):
 
 
 def test_wer_base(monkeypatch):
-    monkeypatch.setattr(whisper, "load_model", mock_load_model)
+    monkeypatch.setattr(
+        whisper, "load_model", MockModelLoader(return_strategy="reference")
+    )
     monkeypatch.setattr(utils, "GPUEnergyMeter", MockGPUEnergyMeter)
+    patch_wer(monkeypatch)
     wer, runtime, energy = wer_benchmark(
         ModelSize.BASE,
         Path("benchmarks/examples/10-min-talk.mp3"),
@@ -34,8 +72,9 @@ def test_wer_base(monkeypatch):
 
 
 def test_runtime(monkeypatch):
-    monkeypatch.setattr(whisper, "load_model", mock_load_model)
+    monkeypatch.setattr(whisper, "load_model", MockModelLoader(return_strategy="empty"))
     monkeypatch.setattr(utils, "GPUEnergyMeter", MockGPUEnergyMeter)
+    patch_wer(monkeypatch)
     wer, runtime, energy = wer_benchmark(
         ModelSize.TINY,
         Path("benchmarks/examples/10-min-talk.mp3"),
@@ -46,8 +85,9 @@ def test_runtime(monkeypatch):
 
 
 def test_energy(monkeypatch):
-    monkeypatch.setattr(whisper, "load_model", mock_load_model)
+    monkeypatch.setattr(whisper, "load_model", MockModelLoader(return_strategy="empty"))
     monkeypatch.setattr(utils, "GPUEnergyMeter", MockGPUEnergyMeter)
+    patch_wer(monkeypatch)
     wer, runtime, energy = wer_benchmark(
         ModelSize.TINY,
         Path("benchmarks/examples/10-min-talk.mp3"),
