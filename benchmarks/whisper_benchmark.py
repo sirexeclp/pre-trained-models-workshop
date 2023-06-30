@@ -33,7 +33,7 @@ def wer_benchmark(
 
     start = None  # TODO: save the timestamp of the start of this benchmark
     with gpu_energy:
-        prediction = model.transcribe(str(input_file))
+        prediction = None  # TODO: use whisper to transcribe the audio file
     end = None  # TODO: save the timestamp of the bend of this benchmark
     runtime = None  # TODO: compute the runtime
 
