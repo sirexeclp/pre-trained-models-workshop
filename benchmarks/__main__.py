@@ -32,6 +32,7 @@ def main():
     """The main function."""
     examples_path = Path("benchmarks", "examples")
     results_path = Path("benchmarks", "results", "whisper_benchmark")
+    results_path.mkdir(exist_ok=True, parents=True)
     input_file = examples_path / "10-min-talk.mp3"
     reference_file = examples_path / "10-min-talk-reference.txt"
     results_file = results_path / f"{get_gpu_name()}.csv"
