@@ -4,6 +4,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Tuple
 
+import torchmetrics.functional
 import whisper
 
 from . import utils
@@ -31,16 +32,15 @@ def wer_benchmark(
     model = whisper.load_model(model_size.value)
     gpu_energy = utils.GPUEnergyMeter()
 
-    start = None  # TODO: save the timestamp of the start of this benchmark
+    start = time.time()
     with gpu_energy:
-        prediction = None  # TODO: use whisper to transcribe the audio file
-    end = None  # TODO: save the timestamp of the bend of this benchmark
-    runtime = None  # TODO: compute the runtime
-
+        prediction = model.transcribe(input_file)["text"]
+    end = time.time()
+    runtime = end - start
     target = reference_file.read_text()
-    wer = None  # TODO: insert function to compute word error rate
-    # Hint: maybe you can find a library function
-    # torch metrics: https://torchmetrics.readthedocs.io/en/stable/
+    wer = torchmetrics.functional.word_error_rate(
+        preds=prediction, target=target
+    ).item()
     return (
         wer,
         runtime,
