@@ -11,6 +11,8 @@ from . import utils
 
 app = FastAPI()
 
+import transformers
+
 
 class Result(BaseModel):
     summary: str
@@ -34,21 +36,17 @@ async def summarize(
     5. return the Result object back to the client
     """
     audio = utils.load_audio(file)
-    model = None  # TODO: load the requested size of whisper
-    transcript = None  # TODO: use whisper to transcribe the audio file
-    # Hint: you can pass the audio object directly to the the model
+    model = whisper.load_model(whisper_model_size)
+    transcript = model.transcribe(audio)["text"]
 
-    summarizer = None  # TODO: load the summarization pipeline
-    # Hint: to pass the tests you should use this model
-    # https://huggingface.co/pszemraj/long-t5-tglobal-base-16384-book-summary
-    # once you've got everything running, you are free to try out other models :)
+    summarizer = transformers.pipeline(
+        "summarization", model="pszemraj/long-t5-tglobal-base-16384-book-summary"
+    )
 
-    summary = None  # TODO: use the summarizer to summarize the transcript
-    # Hint: infos about the summarization pipeline can be found here:
-    # https://huggingface.co/docs/transformers/tasks/summarization#inference
-    # https://huggingface.co/docs/transformers/v4.30.0/en/main_classes/pipelines#transformers.SummarizationPipeline
-    # https://huggingface.co/docs/transformers/en/main_classes/text_generation#transformers.generation.GenerationMixin.generate
-    return None  # TODO: return Result object with summary and transcript
+    summary = summarizer(
+        transcript, min_length=min_summary_length, max_length=max_summary_length
+    )[0]["summary_text"]
+    return Result(summary=summary, transcript=transcript)
 
 
 # serve static html, css and js files
