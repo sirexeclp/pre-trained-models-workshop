@@ -2,16 +2,17 @@ from pathlib import Path
 
 import torchmetrics
 import whisper
-from mocks import (
+
+import benchmarks.whisper_benchmark
+from benchmarks import utils
+from benchmarks.whisper_benchmark import ModelSize, wer_benchmark
+
+from .mocks import (
     MockGPUEnergyMeter,
     MockModelLoader,
     mock_wer_class,
     mock_word_error_rate,
 )
-
-import benchmarks.whisper_benchmark
-from benchmarks import utils
-from benchmarks.whisper_benchmark import ModelSize, wer_benchmark
 
 
 def patch_wer(monkeypatch):

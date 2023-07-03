@@ -4,11 +4,12 @@ import pytest
 import transformers
 import whisper
 from fastapi.testclient import TestClient
-from mocks import MockModelLoader, MockPipelineLoader, MockResult, mock_load_audio
 
 import condensor.app
 from condensor import utils
 from condensor.app import app, summarize
+
+from .mocks import MockModelLoader, MockPipelineLoader, MockResult, mock_load_audio
 
 
 def apply_pipeline_patch(monkeypatch, pipeline_loader):
