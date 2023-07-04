@@ -12,7 +12,8 @@ default:
 
 build:
   before_script:
-    - apt install git-lfs
+    - apt update
+    - apt install -y git-lfs
   variables:
     GIT_STRATEGY: clone
   script:
