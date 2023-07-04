@@ -1,5 +1,9 @@
 image: python:latest
 
+default:
+  tags:
+    - osm
+
 # before_script:
 #   - python --version ; pip --version  # For debugging
 #   - pip install virtualenv
