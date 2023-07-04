@@ -8,7 +8,14 @@ image: python:latest
 
 build:
   script:
-    - git checkout 
+    - git config user.email "felix.grzelka@hpi.de"
+    - git config user.name "ci-bot"
+    - git remote add gitlab_origin https://oauth2:$ACCESS_TOKEN@gitlab.hpi.de:kisz/workshops/pre-trained-models-workshop.git
+    
+    - ./rebase.sh
+
+    - git push -f gitlab_origin solutions/benchmark -o ci.skip # prevent triggering pipeline again
+    # - git push -f gitlab_origin solutions/benchmark -o ci.skip # prevent triggering pipeline again
 
 # test:
 #   script:
