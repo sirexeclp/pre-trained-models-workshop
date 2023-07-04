@@ -11,6 +11,8 @@ default:
 #   - source venv/bin/activate
 
 build:
+  variables:
+    GIT_STRATEGY: clone
   script:
     - git config user.email "felix.grzelka@hpi.de"
     - git config user.name "ci-bot"
