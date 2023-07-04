@@ -8,6 +8,6 @@ function rebase(){
     git rebase $2
 }
 
-rebase solutions/backend main
-rebase solutions/benchmark solutions/backend
+rebase solutions/benchmark main
+rebase solutions/backend solutions/benchmark
 git checkout $branch
