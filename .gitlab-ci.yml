@@ -4,58 +4,35 @@ default:
   tags:
     - osm
 
-# before_script:
+before_script:
+  - apt update
+  - apt install -y git-lfs
 #   - python --version ; pip --version  # For debugging
 #   - pip install virtualenv
 #   - virtualenv venv
 #   - source venv/bin/activate
 
 build:
-  before_script:
-    - apt update
-    - apt install -y git-lfs
-  variables:
-    GIT_STRATEGY: clone
   script:
     - git config user.email "felix.grzelka@hpi.de"
     - git config user.name "ci-bot"
     - git remote add gitlab_origin https://oauth2:$ACCESS_TOKEN@gitlab.hpi.de/kisz/workshops/pre-trained-models-workshop.git
     
-    # - git fetch origin/solutions/benchmark
-    
     - ./rebase.sh
 
     - git push -f gitlab_origin solutions/benchmark -o ci.skip # prevent triggering pipeline again
-    # - git push -f gitlab_origin solutions/benchmark -o ci.skip # prevent triggering pipeline again
+    - git push -f gitlab_origin solutions/backend -o ci.skip # prevent triggering pipeline again
 
-# test:
-#   script:
-#     - pip install ruff tox  # you can also use tox
-#     - pip install --editable ".[test]"
-#     - tox -e py,ruff
+test_benchmark:
+  script:
+    - git checkout solutions/benchmark
+    - pip install -r requirements.txt
+    - pip install -r requirements-dev.txt
+    - pytest tests/test_benchmarks.py
 
-# run:
-#   script:
-#     - pip install .
-#     # run the command here
-#   artifacts:
-#     paths:
-#       - build/*
-
-# pages:
-#   script:
-#     - pip install sphinx sphinx-rtd-theme
-#     - cd doc
-#     - make html
-#     - mv build/html/ ../public/
-#   artifacts:
-#     paths:
-#       - public
-#   rules:
-#     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
-# deploy:
-#   stage: deploy
-#   script: echo "Define your deployment script!"
-#   environment: production
-
+test_backend:
+  script:
+    - git checkout solutions/backend
+    - pip install -r requirements.txt
+    - pip install -r requirements-dev.txt
+    - pytest
