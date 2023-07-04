@@ -9,5 +9,5 @@ function rebase(){
 }
 
 rebase solutions/backend main
-rebase_on_main solutions/benchmark solutions/backend
+rebase solutions/benchmark solutions/backend
 git checkout $branch
