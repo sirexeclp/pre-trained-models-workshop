@@ -8,3 +8,4 @@ services:
       - TRANSFORMERS_CACHE=/models
     volumes:
       - ./models:/models
+      - ./models/whisper:~/.cache/whisper
