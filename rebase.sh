@@ -10,4 +10,5 @@ function rebase(){
 
 rebase solutions/benchmark main
 rebase solutions/backend solutions/benchmark
+rebase solutions/docker solutions/backend
 git checkout $branch
