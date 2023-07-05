@@ -6,4 +6,12 @@ services:
     volumes:
       - ~/.cache/huggingface:/root/.cache/huggingface
       - ~/.cache/whisper:/root/.cache/whisper
-    # TODO: expose Port 8000 of the app container to the host
+    ports:
+      - "8000-8010:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
