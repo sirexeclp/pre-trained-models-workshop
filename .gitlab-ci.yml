@@ -13,6 +13,8 @@ before_script:
 #   - source venv/bin/activate
 
 build:
+  only:
+    - main
   script:
     - git config user.email "felix.grzelka@hpi.de"
     - git config user.name "ci-bot"
@@ -24,6 +26,8 @@ build:
     - git push -f gitlab_origin solutions/backend -o ci.skip # prevent triggering pipeline again
 
 test_benchmark:
+  only:
+    - main
   script:
     - git checkout solutions/benchmark
     - pip install -r requirements.txt
@@ -31,6 +35,8 @@ test_benchmark:
     - pytest tests/test_benchmarks.py
 
 test_backend:
+  only:
+    - main
   script:
     - git checkout solutions/backend
     - pip install -r requirements.txt
