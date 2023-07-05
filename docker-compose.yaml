@@ -3,7 +3,7 @@ services:
   app:
     build: .
     image: whisper-demo
-    # TODO: expose Port 8000 of the app container to the host
     volumes:
       - ~/.cache/huggingface:/root/.cache/huggingface
       - ~/.cache/whisper:/root/.cache/whisper
+    # TODO: expose Port 8000 of the app container to the host
