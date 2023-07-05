@@ -4,8 +4,6 @@ services:
     build: .
     image: whisper-demo
     # TODO: expose Port 8000 of the app container to the host
-    environment:
-      - TRANSFORMERS_CACHE=/models
     volumes:
-      - ./models:/models
-      - ./models/whisper:~/.cache/whisper
+      - ~/.cache/huggingface:~/.cache/huggingface
+      - ~/.cache/whisper:~/.cache/whisper
