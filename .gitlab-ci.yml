@@ -7,12 +7,13 @@ default:
 before_script:
   - apt update
   - apt install -y git-lfs
-#   - python --version ; pip --version  # For debugging
-#   - pip install virtualenv
-#   - virtualenv venv
-#   - source venv/bin/activate
+
+stages:
+  - build
+  - test
 
 build:
+  stage: build
   only:
     - main
   script:
@@ -27,6 +28,7 @@ build:
     - git push -f gitlab_origin solutions/docker -o ci.skip # prevent triggering pipeline again
 
 test_benchmark:
+  stage: test
   only:
     - main
   script:
@@ -36,6 +38,7 @@ test_benchmark:
     - pytest tests/test_benchmarks.py
 
 test_backend:
+  stage: test
   only:
     - main
   script:
