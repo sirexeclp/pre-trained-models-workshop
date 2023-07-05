@@ -14,8 +14,8 @@ stages:
 
 build:
   stage: build
-  only:
-    - main
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
     - git config user.email "felix.grzelka@hpi.de"
     - git config user.name "ci-bot"
@@ -29,8 +29,8 @@ build:
 
 test_benchmark:
   stage: test
-  only:
-    - main
+  rules:
+      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
     - git checkout solutions/benchmark
     - pip install -r requirements.txt
@@ -39,8 +39,8 @@ test_benchmark:
 
 test_backend:
   stage: test
-  only:
-    - main
+  rules:
+      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
     - git checkout solutions/backend
     - pip install -r requirements.txt
