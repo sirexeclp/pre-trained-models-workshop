@@ -16,7 +16,7 @@ All lines of interest in this file are marked with a `#TODO` comment.
 You can run the tests located in [tests/test_benchmarks.py](tests/test_benchmarks.py) with the following command:
 
 ~~~bash
-pytest tests/test_benchmarks.py
+pytest
 ~~~
 
 ### Step 3: Run the benchmark
@@ -40,6 +40,12 @@ You should now see some plots with your results.
 
 ## Part 2: Demo
 
+> Make sure to checkout the `solutions/benchmark` branch before you continue.
+> ~~~bash
+> git checkout solutions/benchmark
+> ~~~
+>
+
 The KISZ CONDENSOR is a web based tool that can summarize audio files in text form.
 It uses OpenAI Whisper to transcribe the audio and the Huggingface `summary` pipeline with `long-t5` to create a summary.
 The frontend is implemented in HTML5 with bootstrap CSS and jquery.
@@ -59,7 +65,7 @@ As in the previous exercise, your task is to fill in the missing TODOs.
 You can run the tests located in [tests/test_app.py](tests/test_app.py) with the following command:
 
 ~~~bash
-pytest tests/test_app.py
+pytest
 ~~~
 
 ### Step 3: Run the benchmark
@@ -131,3 +137,38 @@ which will just print GPU utilization and memory usage.
 Now, upload a file and keep a look on  Memory-Usage and GPU-Util.
 These will tell you if something (your app) is using the GPU.
 If nothing happens, double check the configuration in your docker compose file.
+
+### Step 4: Configure GPU usage
+
+As you should have seen in Step 3, docker does not automatically pass a GPU to your container. You need to tell docker to use the nvidia runtime and which gpus you want to pass to the container.
+
+Go to https://docs.docker.com/compose/gpu-support/ to learn how to pass a GPU to a docker container in docker compose.
+
+Repeat steps 2 and 3 to restart the container and check that it now actually used the GPU.
+
+~~~bash
+docker compose up --always-recreate-deps --build
+~~~
+
+### Step 5: Run multiple containers
+
+> Before you continue checkout the solutions/docker branch
+> ~~~bash
+> git checkout solutions/docker
+> ~~~
+
+Alternatively make sure you have specified a port range in your docker-compose file, such as:
+
+~~~yaml
+ports:
+  - "8000-8010:8000"
+~~~
+
+You can start multiple containers with 
+
+~~~bash
+docker compose up --scale app=3
+~~~
+
+and access them at port 8000, 8001, ...
+
