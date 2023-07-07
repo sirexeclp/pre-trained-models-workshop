@@ -92,8 +92,10 @@ def mock_load_audio(path: str):
 
 
 def mock_word_error_rate(preds: str, target: str):
-    assert isinstance(preds, str), "Prediction should be a string!"
-    assert isinstance(target, str), "Target should be a string!"
+    assert isinstance(
+        preds, str
+    ), f"Prediction should be a string but was {type(preds)}!"
+    assert isinstance(target, str), f"Target should be a string but was {type(target)}!"
     return word_error_rate(preds=preds, target=target)
 
 

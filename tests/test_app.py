@@ -87,7 +87,7 @@ def test_pipeline_execution(monkeypatch):
 
     assert isinstance(
         pipeline_loader.pipeline.inputs, str
-    ), "Incorrect input type to summarization pipeline! Expected string!"
+    ), f"Incorrect input type to summarization pipeline! Expected string but got {type(pipeline_loader.pipeline.inputs)}!"
     assert (
         pipeline_loader.pipeline.inputs == "transcript"
     ), "Incorrect input to summarization pipeline!"
@@ -125,8 +125,12 @@ def test_pipeline_output(monkeypatch):
 
     asyncio.run(summarize(None, model_size, 10, 15))
 
-    assert isinstance(mock_result.transcript, str), "Transcript should be a string!"
+    assert isinstance(
+        mock_result.transcript, str
+    ), f"Transcript should be a string but was {type(mock_result.transcript)}!"
     assert mock_result.transcript == "transcript", "Unexpected value for transcript!"
 
-    assert isinstance(mock_result.summary, str), "Summary should be a string!"
+    assert isinstance(
+        mock_result.summary, str
+    ), f"Summary should be a string but was {type(mock_result.summary)}!"
     assert mock_result.summary == "summary", "Unexpected value for summary!"
