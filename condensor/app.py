@@ -23,7 +23,7 @@ async def summarize(
     whisper_model_size: str = Form(),
     min_summary_length: int = Form(),
     max_summary_length: int = Form(),
-):
+) -> Result:
     """Summarize the uploaded file.
 
     1. use the load_audio function to load the audio file
