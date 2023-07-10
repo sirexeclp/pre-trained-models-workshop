@@ -42,6 +42,7 @@ You should now see some plots with your results.
 
 > Make sure to checkout the `solutions/benchmark` branch before you continue.
 > ~~~bash
+> git stash
 > git checkout solutions/benchmark
 > ~~~
 >
@@ -154,6 +155,7 @@ docker compose up --always-recreate-deps --build
 
 > Before you continue checkout the solutions/docker branch
 > ~~~bash
+> git stash
 > git checkout solutions/docker
 > ~~~
 
@@ -172,3 +174,6 @@ docker compose up --scale app=3
 
 and access them at port 8000, 8001, ...
 
+- [http://localhost:8000](http://localhost:8000)
+- [http://localhost:8001](http://localhost:8001)
+- [http://localhost:8002](http://localhost:8002)
