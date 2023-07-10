@@ -52,7 +52,9 @@ def test_wer_tiny(monkeypatch):
         Path("benchmarks/examples/10-min-talk-reference.txt"),
     )
     assert wer is not None, "Word Error Rate need's to be implemented!"
-    assert isinstance(wer, float), "Word Error Rate must be of type Float!"
+    assert isinstance(
+        wer, float
+    ), f"Word Error Rate must be of type Float but was {type(wer)}!"
 
     # the mocked tiny model will have a wer of 1
     assert wer == 1, "Word Error Rate is incorrect!"
@@ -70,7 +72,9 @@ def test_wer_base(monkeypatch):
         Path("benchmarks/examples/10-min-talk-reference.txt"),
     )
     assert wer is not None, "Word Error Rate need's to be implemented!"
-    assert isinstance(wer, float), "Word Error Rate must be of type Float!"
+    assert isinstance(
+        wer, float
+    ), f"Word Error Rate must be of type Float but was {type(wer)}!"
     # the mocked base model will have a wer of 0
     assert wer == 0, "Word Error Rate is incorrect!"
 
@@ -85,7 +89,9 @@ def test_runtime(monkeypatch):
         Path("benchmarks/examples/10-min-talk-reference.txt"),
     )
     assert runtime is not None, "Runtime measurement needs to be implemented!"
-    assert 0.1 < runtime < 0.2, "Runtime measurement is incorrect!"
+    assert (
+        0.1 < runtime < 0.2
+    ), f"Runtime measurement is incorrect! Expected t between 0.1s and 0.2s but got {runtime}."
 
 
 def test_energy(monkeypatch):
@@ -99,4 +105,4 @@ def test_energy(monkeypatch):
     )
     assert (
         energy == 1_000
-    ), "Energy measurement is incorrect!"  # this should pass by default
+    ), "Energy measurement is incorrect! Should be 1000!"  # this should pass by default
